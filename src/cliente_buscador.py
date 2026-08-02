@@ -1,12 +1,20 @@
 import time
 import threading
+import streamlit as st
 
 import requests
+import os
+from dotenv import load_dotenv
+
+load_dotenv()
 
 
 TOKEN_URL = "https://servicios-prd.mercadopublico.cl/v1/auth/publico"
 FICHA_URL = "https://api.buscador.mercadopublico.cl/compra-agil"
-API_KEY = "e93089e4-437c-4723-b343-4fa20045e3bc"
+API_KEY = os.getenv("API_KEY")
+
+if API_KEY is None:
+    API_KEY = st.secrets["API_KEY"]
 
 
 class ClienteBuscador:
