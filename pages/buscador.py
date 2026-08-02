@@ -139,13 +139,13 @@ export default function(component) {
         );
     }
 
-    window.addEventListener(
+    window.top.addEventListener(
         "message",
         recibirAccionPanel
     );
 
     return () => {
-        window.removeEventListener(
+        window.top.removeEventListener(
             "message",
             recibirAccionPanel
         );
@@ -762,6 +762,7 @@ def mostrar_tabla_compras():
 
                 <script>
                 (() => {{
+                    console.log("ST.HTML EJECUTADO"); 
                     function encontrarCodigo(contenedor, codigo) {{
                         const walker = document.createTreeWalker(
                             contenedor,
@@ -916,14 +917,20 @@ def mostrar_tabla_compras():
                     document
                         .querySelectorAll(".vs-abrir-compra")
                         .forEach((boton) => {{
+                            console.log("BOTON ENCONTRADO:", boton.dataset.codigo);
                             boton.addEventListener(
                                 "click",
                                 () => {{
+                                    console.log("CLICK DETECTADO:", boton.dataset.codigo);
                                     const codigo =
                                         boton.dataset.codigo;
+                                    
+                                    console.log(
+                                    "[V&S] soy top?",
+                                    window === window.top)
 
                                     // 1. Abrir la compra mediante la extensión
-                                    window.postMessage(
+                                    window.top.postMessage(
                                         {{
                                             type: "VS_ABRIR_COMPRA",
                                             codigo: codigo
@@ -932,7 +939,7 @@ def mostrar_tabla_compras():
                                     );
 
                                     // 2. Avisar a Python para marcarla como ofertada
-                                    window.postMessage(
+                                    window.top.postMessage(
                                         {{
                                             type: "VS_PANEL_MARCAR_OFERTADA",
                                             codigo: codigo
@@ -962,9 +969,17 @@ def mostrar_tabla_compras():
         components.html(
             f"""
             <script>
-                window.postMessage(
+                window.top.postMessage(
                     {{
                         type: "VS_ABRIR_COMPRA",
+                        codigo: {codigo_js}
+                    }},
+                    "*"
+                );
+
+                window.top.postMessage(
+                    {{
+                        type: "VS_PANEL_MARCAR_OFERTADA",
                         codigo: {codigo_js}
                     }},
                     "*"
