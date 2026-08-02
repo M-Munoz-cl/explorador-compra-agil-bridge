@@ -394,6 +394,24 @@ def mostrar_tabla_compras():
     # Copia para no modificar resultados originales
     df_filtrado = df.copy()
 
+    ordenar_por = st.selectbox(
+        "Ordenar por",
+        [
+            "Sin orden adicional",
+            "Fecha de cierre",
+            "Presupuesto",
+            "Nombre",
+            "Código"
+        ],
+        key="ordenar_por"
+    )
+
+    orden_descendente = st.toggle(
+        "Orden descendente",
+        value=False,
+        key="orden_descendente"
+    )
+
     if palabra_busqueda and palabra_busqueda.strip():
         df_filtrado = df_filtrado[
                 df_filtrado["Nombre"]
@@ -405,6 +423,30 @@ def mostrar_tabla_compras():
                     regex=False
                 )
         ]
+
+    if ordenar_por != "Sin orden adicional":
+        columnas_orden = {
+            "Fecha de cierre": "Fecha de cierre",
+            "Presupuesto": "Presupuesto",
+            "Nombre": "Nombre",
+            "Código": "Codigo"
+        }
+
+        columna_orden = columnas_orden[ordenar_por]
+
+        df_filtrado = (
+            df_filtrado
+            .sort_values(
+                by=columna_orden,
+                ascending=not orden_descendente,
+                na_position="last"
+            )
+            .reset_index(drop=True)
+        )
+    else:
+        df_filtrado = df_filtrado.reset_index(
+            drop=True
+        )
 
     st.caption(
         f"Mostrando {len(df_filtrado)} de {len(df)} oportunidades"
