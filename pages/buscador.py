@@ -923,7 +923,7 @@ def mostrar_tabla_compras():
                                         boton.dataset.codigo;
 
                                     // 1. Abrir la compra mediante la extensión
-                                    window.parent.postMessage(
+                                    window.postMessage(
                                         {{
                                             type: "VS_ABRIR_COMPRA",
                                             codigo: codigo
@@ -932,7 +932,7 @@ def mostrar_tabla_compras():
                                     );
 
                                     // 2. Avisar a Python para marcarla como ofertada
-                                    window.parent.postMessage(
+                                    window.postMessage(
                                         {{
                                             type: "VS_PANEL_MARCAR_OFERTADA",
                                             codigo: codigo
@@ -962,7 +962,7 @@ def mostrar_tabla_compras():
         components.html(
             f"""
             <script>
-                window.parent.postMessage(
+                window.postMessage(
                     {{
                         type: "VS_ABRIR_COMPRA",
                         codigo: {codigo_js}
