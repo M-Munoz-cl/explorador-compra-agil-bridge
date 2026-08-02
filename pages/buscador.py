@@ -709,7 +709,7 @@ def mostrar_tabla_compras():
                         right: 18px;
                         bottom: 18px;
                         width: 330px;
-                        max-height: 430px;
+                        max-height: 280px;
                         overflow-y: auto;
                         z-index: 999999;
                         padding: 14px;
